@@ -70,11 +70,11 @@ for xpath in choices_xpath:
         print("填写选择题时发生错误:", e)
 
 # 提交问卷
-# submit_button = driver.find_element(By.XPATH, '//*[@id="ctlNext"]')
-# submit_button.click()
+submit_button = driver.find_element(By.XPATH, '//*[@id="ctlNext"]')
+submit_button.click()
 # input()
 # 关闭浏览器
-# time.sleep(3)
-# driver.quit()
+time.sleep(3)
+driver.quit()
 
 # //*[@id="div1"]/div[2]/div[1]
