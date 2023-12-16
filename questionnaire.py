@@ -1,4 +1,4 @@
-#第一版星问卷自动填写工具
+#第二版星问卷自动填写工具
 
 import random
 from selenium import webdriver
@@ -28,19 +28,10 @@ html_txt = responese.text
 soup = BeautifulSoup(html_txt,"lxml")
 all_topic = soup.findAll("div",attrs={"class":"ui-controlgroup column1"})
 # titles_num = soup.select('p.title')
-print(len(all_topic))
-# print(all_topic)
 choices_xpath=[]
-choices_xpathnum = []
-# for num in range(1,len(all_topic)+1):
 for num in range(1,len(all_topic)+1):
     newxpath = '//*[@id="div{}"]/div[2]/*'.format(num)
     choices_xpath.append(newxpath)
-    # all_topicnum = soup.find("div",attrs={"topic": "{}".format(num)})
-    # print(choices_xpath)
-    # choices_xpathnum.append(all_topicnum)
-    # print(all_topicnum)
-# //*[@id="div1"]/div[2]/div[1]
 # 启动浏览器
 driver = webdriver.Chrome()
 
@@ -53,13 +44,10 @@ for xpath in choices_xpath:
     try:
         # 获取所有符合xpath条件的选项
         choices = driver.find_elements(By.XPATH, xpath)
-        # print(type(choices))
         class_name = choices[0].get_attribute("class")
         if "ui-checkbox" in class_name:
             random_count = random.randint(1,len(choices))
             print(random_count,"max ",len(choices))
-            # for i in random.randint(1,len(choices)):
-            # print(random.sample(choices,random_count))
             for choice in random.sample(choices,random_count):
                 choice.click()
         else:
@@ -74,7 +62,5 @@ submit_button = driver.find_element(By.XPATH, '//*[@id="ctlNext"]')
 submit_button.click()
 # input()
 # 关闭浏览器
-time.sleep(3)
+# time.sleep(3)
 driver.quit()
-
-# //*[@id="div1"]/div[2]/div[1]
