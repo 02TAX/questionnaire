@@ -10,7 +10,9 @@ from bs4 import BeautifulSoup
 from lxml import etree
 import numpy as np
 
-url = "https://www.wjx.cn/vm/tjTwe7A.aspx#"
+url = "https://www.wjx.cn/vm/tjTwe7A.aspx#" #问卷网页链接
+needtimes = 3   #刷的次数
+
 
 header = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
@@ -32,35 +34,38 @@ choices_xpath=[]
 for num in range(1,len(all_topic)+1):
     newxpath = '//*[@id="div{}"]/div[2]/*'.format(num)
     choices_xpath.append(newxpath)
-# 启动浏览器
-driver = webdriver.Chrome()
 
-# 打开问卷链接
-driver.get(url)
-# time.sleep(3)
+for times in range(1,needtimes+1):
+    # 启动浏览器
+    driver = webdriver.Chrome()
 
-# 填写选择题
-for xpath in choices_xpath:
-    try:
-        # 获取所有符合xpath条件的选项
-        choices = driver.find_elements(By.XPATH, xpath)
-        class_name = choices[0].get_attribute("class")
-        if "ui-checkbox" in class_name:
-            random_count = random.randint(1,len(choices))
-            print(random_count,"max ",len(choices))
-            for choice in random.sample(choices,random_count):
-                choice.click()
-        else:
-            random_choice = random.choice(choices)
-            random_choice.click()
-        
-    except Exception as e:
-        print("填写选择题时发生错误:", e)
+    # 打开问卷链接
+    driver.get(url)
+    # time.sleep(3)
 
-# 提交问卷
-submit_button = driver.find_element(By.XPATH, '//*[@id="ctlNext"]')
-submit_button.click()
-# input()
-# 关闭浏览器
-# time.sleep(3)
-driver.quit()
+    # 填写选择题
+    for xpath in choices_xpath:
+        try:
+            # 获取所有符合xpath条件的选项
+            choices = driver.find_elements(By.XPATH, xpath)
+            class_name = choices[0].get_attribute("class")
+            if "ui-checkbox" in class_name:
+                random_count = random.randint(1,len(choices))
+                # print(random_count,"max ",len(choices))
+                for choice in random.sample(choices,random_count):
+                    choice.click()
+            else:
+                random_choice = random.choice(choices)
+                random_choice.click()
+            
+        except Exception as e:
+            print("填写选择题时发生错误:", e)
+
+    # 提交问卷
+    submit_button = driver.find_element(By.XPATH, '//*[@id="ctlNext"]')
+    submit_button.click()
+    # input()
+    # 关闭浏览器
+    # time.sleep(3)
+    driver.quit()
+    times+=times
